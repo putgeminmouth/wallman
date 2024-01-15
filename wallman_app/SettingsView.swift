@@ -7,10 +7,12 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import ServiceManagement
 
 struct SettingsView: View {
     @Binding var lockFilePath: String
     @Binding var unlockFilePath: String
+    @AppStorage("launchAtStartup") var launchAtStartup: Bool = false
     @State private var lockFilePickerPresented = false
     @State private var unlockFilePickerPresented = false
 
@@ -25,6 +27,23 @@ struct SettingsView: View {
                     .opacity(0.080)
                 
                 VStack(alignment: .leading) {
+                    Toggle("Launch at startup", isOn: $launchAtStartup)
+                        .onChange(of: launchAtStartup) {
+                            if (launchAtStartup) {
+                                do {
+                                    try SMAppService.mainApp.register()
+                                } catch {
+                                    print(error)
+                                }
+                            } else {
+                                do {
+                                    try SMAppService.mainApp.unregister()
+                                } catch {
+                                    print(error)
+                                }
+                            }
+                        }
+                    Divider()
                     Text("Images to set as wallpaper when the screen is")
                     HStack {
                         TextField("Locked", text: $lockFilePath, prompt: nil)
