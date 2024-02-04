@@ -14,6 +14,9 @@
 		03362ED62B4AE65A003F14F3 /* wallman2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 03362ED52B4AE65A003F14F3 /* wallman2.jpg */; };
 		03362ED82B4AEE48003F14F3 /* WallmanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03362ED72B4AEE48003F14F3 /* WallmanApp.swift */; };
 		03DBDA892B535B9500CAA222 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 03DBDA882B535B9400CAA222 /* README.md */; };
+		03F0B0CC2B730DB700462250 /* Wall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0B0CB2B730DB700462250 /* Wall.swift */; };
+		03F0B0CE2B730DC100462250 /* build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 03F0B0CD2B730DC100462250 /* build.sh */; };
+		03F0B0D02B73112800462250 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0B0CF2B73112700462250 /* Screen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		03362ED52B4AE65A003F14F3 /* wallman2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallman2.jpg; sourceTree = "<group>"; };
 		03362ED72B4AEE48003F14F3 /* WallmanApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallmanApp.swift; sourceTree = "<group>"; };
 		03DBDA882B535B9400CAA222 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		03F0B0CB2B730DB700462250 /* Wall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wall.swift; sourceTree = "<group>"; };
+		03F0B0CD2B730DC100462250 /* build.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build.sh; sourceTree = "<group>"; };
+		03F0B0CF2B73112700462250 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				03DBDA882B535B9400CAA222 /* README.md */,
+				03F0B0CD2B730DC100462250 /* build.sh */,
 				03362EC12B4AE5C8003F14F3 /* wallman_app */,
 				03362EC02B4AE5C8003F14F3 /* Products */,
 			);
@@ -62,6 +69,8 @@
 				03362ED52B4AE65A003F14F3 /* wallman2.jpg */,
 				03362ED22B4AE650003F14F3 /* AboutView.swift */,
 				03362ED12B4AE650003F14F3 /* SettingsView.swift */,
+				03F0B0CF2B73112700462250 /* Screen.swift */,
+				03F0B0CB2B730DB700462250 /* Wall.swift */,
 				03362ED72B4AEE48003F14F3 /* WallmanApp.swift */,
 				03362EC62B4AE5CB003F14F3 /* Assets.xcassets */,
 				03362ECB2B4AE5CB003F14F3 /* wallman_app.entitlements */,
@@ -140,6 +149,7 @@
 				03362EC72B4AE5CB003F14F3 /* Assets.xcassets in Resources */,
 				03DBDA892B535B9500CAA222 /* README.md in Resources */,
 				03362ED62B4AE65A003F14F3 /* wallman2.jpg in Resources */,
+				03F0B0CE2B730DC100462250 /* build.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +160,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03F0B0D02B73112800462250 /* Screen.swift in Sources */,
 				03362ED42B4AE650003F14F3 /* AboutView.swift in Sources */,
+				03F0B0CC2B730DB700462250 /* Wall.swift in Sources */,
 				03362ED32B4AE650003F14F3 /* SettingsView.swift in Sources */,
 				03362ED82B4AEE48003F14F3 /* WallmanApp.swift in Sources */,
 			);

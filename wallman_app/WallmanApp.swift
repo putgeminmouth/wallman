@@ -1,18 +1,12 @@
-//
-//  wallmanApp.swift
-//  wallman
-//
-//  Created by d on 2024-01-03.
-//
-
 import SwiftUI
-
+import OSLog
 
 @main
 struct WallmanApp: App {
+    let logger = Logger(subsystem: "Wallman", category: "App")
+    
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @AppStorage("lockFilePath") private var lockFilePath: String = ""
-    @AppStorage("unlockFilePath") private var unlockFilePath: String = ""
+    @AppStorage("walls") private var walls: [Wall] = []
     @AppStorage("enabled") private var enabled: Bool = true
 
     var hasAppeared = false
@@ -30,47 +24,58 @@ struct WallmanApp: App {
             }
         }
         Settings {
-            SettingsView(lockFilePath: $lockFilePath, unlockFilePath: $unlockFilePath)
+            SettingsView(walls: $walls)
         }
     }
     
-    func setDesktopImage(filePath: String) {
+    func setDesktopImages(picker: (Wall) -> String?) {
+        NSScreen.screens.forEach { screen in
+            var screenId = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")]
+            if let wall = (walls.first{ $0.screenId == screenId as? UInt32}) {
+                if !(wall.enabled) {
+                    return
+                }
+                if let image = picker(wall) {
+                    setDesktopImage(screen: screen, filePath: image)
+                }
+            }
+        }
+    }
+    func setDesktopImage(screen: NSScreen, filePath: String) {
         do {
-            print(filePath)
+            logger.debug("\(filePath)")
             let imgurl = NSURL.fileURL(withPath: filePath)
             
             let workspace = NSWorkspace.shared
-            if let screen = NSScreen.main  {
-                try workspace.setDesktopImageURL(imgurl, for: screen, options: [:])
-            }
+            try workspace.setDesktopImageURL(imgurl, for: screen, options: [:])
         } catch {
-            print(error)
+            logger.error("Failed to set desktop image: \(error)")
         }
     }
     
     init() {
-        NSLog("Init")
+        logger.debug("Init")
         appDelegate.app = self
     }
     
     func onStart() {
-        print("onStart")
+        logger.debug("onStart")
         
         let dnc = DistributedNotificationCenter.default()
 
         dnc.addObserver(forName: .init("com.apple.screenIsLocked"),
-                                       object: nil, queue: .main) { _ in
-            NSLog("Screen Locked")
+                        object: nil, queue: .main) { _ in
+            logger.debug("Screen Locked")
             if (enabled) {
-                setDesktopImage(filePath: lockFilePath)
+                setDesktopImages{$0.locked}
             }
         }
 
         dnc.addObserver(forName: .init("com.apple.screenIsUnlocked"),
-                                         object: nil, queue: .main) { _ in
-            NSLog("Screen Unlocked")
+                        object: nil, queue: .main) { _ in
+            logger.debug("Screen Unlocked")
             if (enabled) {
-                setDesktopImage(filePath: unlockFilePath)
+                setDesktopImages{$0.unlocked}
             }
         }
     }
@@ -81,7 +86,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var aboutBoxWindowController: NSWindowController?
     
     func applicationWillFinishLaunching(_ notification: Notification) {
-        print("Delegate")
         NSApp.setActivationPolicy(.accessory)
 
         app!.onStart()
