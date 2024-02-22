@@ -17,16 +17,17 @@ xcodebuild archive -configuration Release -project wallman_app.xcodeproj -scheme
 
 echo "Tag & Commit"
 echo "Current Version $(xcrun agvtool what-version -terse)"
-xcrun agvtool what-marketing-version
+xcrun agvtool next-version
 VERSION="v1.$(xcrun agvtool what-version -terse)"
 echo "New Version $VERSION"
 git commit -m"Version $VERSION"
 git tag $VERSION
+git push origin HEAD
 git push --tags
 
 APP=$(find $WORK -name 'Wallpaper Manager.app')
 pushd "$(dirname "$APP")"
-tar cvzf  "$WORK/wallman.tar.gz" "$(basename "$APP")"
+zip -r  "$WORK/wallman.zip" "$(basename "$APP")"
 popd
 
 echo $WORK
