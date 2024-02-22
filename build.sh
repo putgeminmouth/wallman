@@ -20,14 +20,14 @@ echo "Current Version $(xcrun agvtool what-version -terse)"
 xcrun agvtool next-version
 VERSION="v1.$(xcrun agvtool what-version -terse)"
 echo "New Version $VERSION"
-git commit -m"Version $VERSION"
+git commit -am"Version $VERSION"
 git tag $VERSION
 git push origin HEAD
 git push --tags
 
 APP=$(find $WORK -name 'Wallpaper Manager.app')
 pushd "$(dirname "$APP")"
-zip -r  "$WORK/wallman.zip" "$(basename "$APP")"
+zip -r  "$WORK/wallman-${VERSION}.zip" "$(basename "$APP")"
 popd
 
 echo $WORK
