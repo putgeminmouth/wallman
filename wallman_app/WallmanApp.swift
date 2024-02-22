@@ -103,6 +103,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         aboutBoxWindowController?.showWindow(aboutBoxWindowController?.window)
         aboutBoxWindowController?.window?.orderFrontRegardless()
+        aboutBoxWindowController?.window?.center()
     }
     
 }
