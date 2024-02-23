@@ -70,60 +70,62 @@ struct SettingsView: View {
                     }
                 Divider()
 
-                ForEach($walls, id: \.screenId) {
-                    let wall = $0.wrappedValue
-                    let index: Int = walls.firstIndex{$0 == wall}!
-                    let displayName = wall.displayName
-                    let screenId = wall.screenId
-
-                    GroupBox("\(displayName) (\(String(format: "%d", screenId)))") {
-                        ZStack(alignment:.top) {
-                            if (wall.connected) {
-                                Button(action: {
-                                    walls[index] = Wall(screenId: wall.screenId, displayName: wall.displayName, connected: true, enabled: false)
-                                }) {
-                                    Image(systemName: "arrow.uturn.backward")
-                                }.buttonStyle(PlainButtonStyle())
-                                    .padding(5)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .help("Clear this configuration. You cannot remove connected screens, but you can disable them.")
-                            } else {
-                                Button(action: {
-                                    walls.remove(at: index)
-                                }) {
-                                    Image(systemName: "trash")
-                                }.buttonStyle(PlainButtonStyle())
-                                    .padding(5)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .help("Remove this screen, it will show again if reconnected.")
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Toggle("Screen is connected", isOn: $walls[index].connected)
-                                    .disabled(true)
-                                Toggle("Enable for this screen", isOn: $walls[index].enabled)
-                                Text("Images to set as wallpaper when the screen is")
-
-                                HStack {
-                                    TextField("Locked", text: bindOpt(lhs: $walls[index].locked, rhs: "")/*Binding(get: wall.locked, set: wall.locked=$0)*/, prompt: nil)
-                                    Button("...") {
-                                        lockFilePickerPresented[index] = true
-                                    }.fileImporter(isPresented: Binding(get: {(lockFilePickerPresented[index] ?? false)}, set: {lockFilePickerPresented[index] = $0}), allowedContentTypes: [UTType("public.item")!]) { result in
-                                        do {
-                                            let url = try result.get()
-                                            walls[index].locked = url.path
-                                        } catch {}
-                                    }
+                ScrollView {
+                    ForEach($walls, id: \.screenId) {
+                        let wall = $0.wrappedValue
+                        let index: Int = walls.firstIndex{$0 == wall}!
+                        let displayName = wall.displayName
+                        let screenId = wall.screenId
+                        
+                        GroupBox("\(displayName) (\(String(format: "%d", screenId)))") {
+                            ZStack(alignment:.top) {
+                                if (wall.connected) {
+                                    Button(action: {
+                                        walls[index] = Wall(screenId: wall.screenId, displayName: wall.displayName, connected: true, enabled: false)
+                                    }) {
+                                        Image(systemName: "arrow.uturn.backward")
+                                    }.buttonStyle(PlainButtonStyle())
+                                        .padding(5)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .help("Clear this configuration. You cannot remove connected screens, but you can disable them.")
+                                } else {
+                                    Button(action: {
+                                        walls.remove(at: index)
+                                    }) {
+                                        Image(systemName: "trash")
+                                    }.buttonStyle(PlainButtonStyle())
+                                        .padding(5)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .help("Remove this screen, it will show again if reconnected.")
                                 }
-                                HStack {
-                                    TextField("Unlocked", text: bindOpt(lhs: $walls[index].unlocked, rhs: ""), prompt: nil)
-                                    Button("...") {
-                                        unlockFilePickerPresented[index] = true
-                                    }.fileImporter(isPresented: Binding(get: {(unlockFilePickerPresented[index] ?? false)}, set: {unlockFilePickerPresented[index] = $0}), allowedContentTypes: [UTType("public.item")!]) { result in
-                                        do {
-                                            let url = try result.get()
-                                            walls[index].unlocked = url.path
-                                        } catch {}
+                                
+                                VStack(alignment: .leading) {
+                                    Toggle("Screen is connected", isOn: $walls[index].connected)
+                                        .disabled(true)
+                                    Toggle("Enable for this screen", isOn: $walls[index].enabled)
+                                    Text("Images to set as wallpaper when the screen is")
+                                    
+                                    HStack {
+                                        TextField("Locked", text: bindOpt(lhs: $walls[index].locked, rhs: "")/*Binding(get: wall.locked, set: wall.locked=$0)*/, prompt: nil)
+                                        Button("...") {
+                                            lockFilePickerPresented[index] = true
+                                        }.fileImporter(isPresented: Binding(get: {(lockFilePickerPresented[index] ?? false)}, set: {lockFilePickerPresented[index] = $0}), allowedContentTypes: [UTType("public.item")!]) { result in
+                                            do {
+                                                let url = try result.get()
+                                                walls[index].locked = url.path
+                                            } catch {}
+                                        }
+                                    }
+                                    HStack {
+                                        TextField("Unlocked", text: bindOpt(lhs: $walls[index].unlocked, rhs: ""), prompt: nil)
+                                        Button("...") {
+                                            unlockFilePickerPresented[index] = true
+                                        }.fileImporter(isPresented: Binding(get: {(unlockFilePickerPresented[index] ?? false)}, set: {unlockFilePickerPresented[index] = $0}), allowedContentTypes: [UTType("public.item")!]) { result in
+                                            do {
+                                                let url = try result.get()
+                                                walls[index].unlocked = url.path
+                                            } catch {}
+                                        }
                                     }
                                 }
                             }
